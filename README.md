@@ -1,4 +1,4 @@
-# AzureSQLMonitoringContainers
+# Azure SQL Metrics collector (Telegraf and Fluent-Bit)
 
 Helm chart collecting SQL Server, Azure SQL Managed Instance and Azure SQL Databases metrics every 10 seconds and publishing them to Log Analytics.
 
