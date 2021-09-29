@@ -1,0 +1,4 @@
+appVersion: "1.0.0"
+description: Deploy Telegraf to collect Azure SQL (MI, DB, VM) metrics
+name: azuresqltelegraf
+version: 1.0.0

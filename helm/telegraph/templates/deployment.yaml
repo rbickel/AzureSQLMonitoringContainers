@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-azuresqlmonitoring
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-azuresqlmonitoring
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-azuresqlmonitoring
+    spec:     
+      volumes:
+      - name: logs-volume
+        emptyDir: {}
+      - name: telegraf-config 
+        configMap:
+          name: {{ .Release.Name }}-telegraf-config          
+      - name: fluent-bit-config 
+        configMap:
+          name: {{ .Release.Name }}-fluent-bit-config
+
+      containers:
+      # telegraf log collector
+      - name: telegraf
+        image: telegraf:latest
+        imagePullPolicy: "IfNotPresent"
+        volumeMounts:
+        - name: logs-volume
+          mountPath: /mnt/logs        
+        - name: telegraf-config
+          mountPath: /etc/telegraf
+      
+      # side car that parse and forward the logs according to its config
+      - name: fluent-bit
+        image: fluent/fluent-bit:latest
+        imagePullPolicy: "IfNotPresent"
+        volumeMounts:
+        - name: logs-volume
+          mountPath: /mnt/logs        
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc

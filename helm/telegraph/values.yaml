@@ -1,0 +1,13 @@
+
+LogAnalytics:
+  WorkspaceId: <WorkspaceId>
+  SharedKey: <SharedKey>
+  LogName: databases
+
+Databases:
+  DB:
+    - "Server=<servername>;Port=1433;User ID=<user>;Password=<password>;Database=<database>;app name=telegraf;log=1;"
+  MI:
+    - "Server=<servername>;Port=1433;User Id=<user>;Password=<password>;app name=telegraf;log=1;"
+  VM:
+    - "Server=<servername>;Port=1433;User Id=<user>;Password=<password>;app name=telegraf;log=1;"

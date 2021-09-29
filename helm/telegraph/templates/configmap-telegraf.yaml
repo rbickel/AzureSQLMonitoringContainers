@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-telegraf-config
+data:
+  # telegraf config
+  telegraf.conf: |        
+    # Configuration for telegraf agent
+    [agent]
+    # Default data collection interval for all inputs
+    interval = "10s"
+
+    #database_type = "AzureSQLManagedInstance" # "AzureSQLDB", "SQLServer"
+
+    [[inputs.sqlserver]]
+    database_type = "AzureSQLManagedInstance"
+    servers = [
+    {{- range .Values.Databases.MI }}
+      {{ . | quote }},
+    {{- end }}    
+    ]
+
+    [[inputs.sqlserver]]
+    database_type = "AzureSQLDB"
+    servers = [
+    {{- range .Values.Databases.DB }}
+      {{ . | quote }},
+    {{- end }}    
+    ]
+
+    [[inputs.sqlserver]]
+    database_type = "SQLServer"
+    servers = [
+    {{- range .Values.Databases.VM }}
+      {{ . | quote }},
+    {{- end }}    
+    ]
+
+    [[outputs.file]]
+      files = ["stdout","/mnt/logs/metrics.out"]
+      ## https://github.com/influxdata/telegraf/blob/master/docs/DATA_FORMATS_OUTPUT.md
+      data_format = "json"
+      #json_timestamp_units = "1us"
+      json_time_format = "2006-01-02T15:04:05.999999999Z"
+      json_time_key = "timestamp"

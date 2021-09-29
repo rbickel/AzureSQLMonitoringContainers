@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-fluent-bit-config
+data:
+  # fluent-bit config
+  fluent-bit-parser.conf: |        
+    [PARSER]
+        Name   json
+        Format json
+        Time_Key timestamp
+        Time_Format %s.%L
+        Time_Keep On
+
+  fluent-bit.conf: |
+    [SERVICE]
+        Parsers_File /fluent-bit/etc/fluent-bit-parser.conf
+
+    [INPUT]
+        Name tail
+        Path /mnt/logs/*.out
+        Parser json
+
+    [OUTPUT]
+        Name            azure
+        Match           *
+        Customer_ID     {{ .Values.LogAnalytics.WorkspaceId }}
+        Shared_Key      {{ .Values.LogAnalytics.SharedKey }}
+        Log_Type        {{ .Values.LogAnalytics.LogName }}
