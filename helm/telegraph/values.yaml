@@ -1,4 +1,6 @@
 
+CollectionInterval: 10s
+
 LogAnalytics:
   WorkspaceId: <WorkspaceId>
   SharedKey: <SharedKey>

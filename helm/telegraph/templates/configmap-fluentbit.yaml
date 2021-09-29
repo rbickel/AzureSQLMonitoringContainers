@@ -3,7 +3,6 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-fluent-bit-config
 data:
-  # fluent-bit config
   fluent-bit-parser.conf: |        
     [PARSER]
         Name   json
